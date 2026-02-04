@@ -1,0 +1,425 @@
+/* ========================================
+   INTERACTIVE ELEMENTS - ULTIMATE VERSION
+   ======================================== */
+
+/* Bot Companion */
+.bot-companion {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 9999;
+  transition: left 0.15s ease-out, top 0.15s ease-out;
+}
+
+.bot-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #00d9ff, #0099cc);
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+  animation: bot-float 2s ease-in-out infinite;
+}
+
+@keyframes bot-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.bot-eye {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #0a0a0f;
+  border-radius: 50%;
+  top: 12px;
+  transition: height 0.1s;
+}
+
+.bot-eye.left { left: 10px; }
+.bot-eye.right { right: 10px; }
+
+.bot-eye.blink {
+  height: 2px;
+  border-radius: 0;
+}
+
+.bot-companion.sleeping .bot-body {
+  animation: bot-sleep 3s ease-in-out infinite;
+}
+
+@keyframes bot-sleep {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(3px); }
+}
+
+.bot-companion.sleeping .bot-eye {
+  height: 2px;
+  border-radius: 0;
+}
+
+.zzz {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  color: #00d9ff;
+  font-size: 12px;
+  font-weight: bold;
+  animation: zzz-float 2s ease-in-out infinite;
+}
+
+@keyframes zzz-float {
+  0% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Floating Particles */
+.floating-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 217, 255, 0.3);
+  border-radius: 50%;
+  animation: particle-float linear infinite;
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Language Toggle */
+.language-toggle {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+}
+
+.language-toggle:hover {
+  background: rgba(0, 217, 255, 0.1);
+  border-color: #00d9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+}
+
+/* Budget Button */
+.budget-button {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #00d9ff, #0099cc);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  color: #0a0a0f;
+  font-weight: bold;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0, 217, 255, 0.4);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(0, 217, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(0, 217, 255, 0.7);
+  }
+}
+
+.budget-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 40px rgba(0, 217, 255, 0.6);
+}
+
+/* Budget Popup */
+.budget-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.budget-popup {
+  background: #0f0f1a;
+  border: 2px solid #00d9ff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 60px rgba(0, 217, 255, 0.5);
+  animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.terminal-header {
+  background: #1a1a2e;
+  border-bottom: 1px solid #00d9ff;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  color: #00d9ff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminal-header button {
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.2s;
+}
+
+.terminal-header button:hover {
+  transform: scale(1.2);
+}
+
+.terminal-content {
+  padding: 24px;
+}
+
+.terminal-line {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.prompt {
+  color: #00d9ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  line-height: 40px;
+  user-select: none;
+}
+
+.terminal-input,
+.terminal-textarea {
+  flex: 1;
+  background: rgba(0, 217, 255, 0.05);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: #00d9ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.terminal-input::placeholder,
+.terminal-textarea::placeholder {
+  color: rgba(0, 217, 255, 0.4);
+}
+
+.terminal-input:focus,
+.terminal-textarea:focus {
+  border-color: #00d9ff;
+  background: rgba(0, 217, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+}
+
+.terminal-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+.terminal-actions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+.send-label {
+  color: #00d9ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.terminal-btn {
+  flex: 1;
+  background: rgba(0, 217, 255, 0.1);
+  border: 1px solid #00d9ff;
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: #00d9ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.terminal-btn:hover:not(:disabled) {
+  background: #00d9ff;
+  color: #0a0a0f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+}
+
+.terminal-btn.whatsapp:hover:not(:disabled) {
+  background: #25D366;
+  border-color: #25D366;
+  color: white;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.terminal-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .budget-button,
+  .language-toggle {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  .budget-button {
+    left: 20px;
+    top: 20px;
+  }
+
+  .language-toggle {
+    right: 20px;
+    top: 20px;
+  }
+
+  .budget-popup {
+    width: 95%;
+  }
+
+  .terminal-header {
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+
+  .terminal-content {
+    padding: 16px;
+  }
+
+  .terminal-buttons {
+    flex-direction: column;
+  }
+
+  .bot-companion {
+    width: 30px;
+    height: 30px;
+  }
+
+  .bot-eye {
+    width: 6px;
+    height: 6px;
+    top: 10px;
+  }
+
+  .bot-eye.left { left: 8px; }
+  .bot-eye.right { right: 8px; }
+}
+
+/* Scroll on popup body */
+.budget-popup::-webkit-scrollbar {
+  width: 8px;
+}
+
+.budget-popup::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+.budget-popup::-webkit-scrollbar-thumb {
+  background: #00d9ff;
+  border-radius: 4px;
+}
+
+.budget-popup::-webkit-scrollbar-thumb:hover {
+  background: #00b3cc;
+}
