@@ -274,4 +274,108 @@ input[type="file"] {
   display: none;
 }
 
+/* ==========================================
+   MOBILE OPTIMIZATION
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* Remove overflow horizontal */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Profile Image menor no mobile */
+  .profile-image-container {
+    width: 220px;
+    height: 260px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .profile-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Textos menores e legíveis no mobile */
+  h1 {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  h3 {
+    font-size: 1.2rem !important;
+  }
+
+  p, span, div {
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Cards empilhados no mobile */
+  .glass-card {
+    margin-bottom: 1rem;
+    padding: 1.5rem !important;
+  }
+
+  /* Skill bars menores */
+  .skill-bar {
+    height: 6px;
+  }
+
+  /* Botões maiores para toque */
+  button {
+    min-height: 44px;
+    padding: 12px 20px !important;
+  }
+
+  /* Reduzir padding geral */
+  .page-content {
+    padding: 1rem !important;
+  }
+
+  /* Scroll indicator menor */
+  .scroll-indicator {
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .profile-image-container {
+    width: 180px;
+    height: 220px;
+  }
+
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.3rem !important;
+  }
+
+  p, span, div {
+    font-size: 0.85rem !important;
+  }
+
+  .glass-card {
+    padding: 1.25rem !important;
+  }
+
+  /* Projetos em coluna única em telas muito pequenas */
+  .project-card {
+    max-width: 100% !important;
+  }
+
+  /* Tags menores */
+  .project-card span {
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+  }
+}
 

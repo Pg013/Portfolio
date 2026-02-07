@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Code2, Database, Terminal, Zap, Briefcase, Mail, MessageCircle, Instagram, ExternalLink, ChevronDown, X, Send, Globe } from 'lucide-react';
+import { Code2, Database, Terminal, Zap, Briefcase, Mail, MessageCircle, Instagram, ChevronDown, X, Send, Globe } from 'lucide-react';
 import './Portfolio.css';
 import './FullPage.css';
 import './Interactive.css';
@@ -10,14 +10,15 @@ export default function Portfolio() {
   const [showBudgetPopup, setShowBudgetPopup] = useState(false);
   const [language, setLanguage] = useState('pt'); // pt or en
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [botSleeping, setBotSleeping] = useState(false);
-  const [botBlinking, setBotBlinking] = useState(false);
+  const [botState, setBotState] = useState('normal'); // normal, blinking, sleeping, happy, dizzy
   const containerRef = useRef(null);
   const lastMoveTime = useRef(Date.now());
+  const lastMousePos = useRef({ x: 0, y: 0 });
+  const inactivityTimer = useRef(null);
   
   const pages = ['home', 'about', 'skills', 'projects', 'contact'];
   
-  const profileImage = "https://i.imgur.com/JgTexRU.png";
+  const profileImage = "https://i.imgur.com/zRsf04n.jpeg";
 
   // Translations
   const translations = {
@@ -132,28 +133,28 @@ export default function Portfolio() {
       id: 1,
       title: language === 'pt' ? 'Sistema HVI - Análise de Algodão' : 'HVI System - Cotton Analysis',
       description: language === 'pt' 
-        ? 'Aplicação Flask completa para extração e análise de dados HVI de PDFs, com interface visual e exportação Excel.'
-        : 'Complete Flask application for HVI data extraction and analysis from PDFs, with visual interface and Excel export.',
+        ? 'Aplicação Flask completa para extração e análise de dados HVI de PDFs. Interface visual com drag-and-drop, processamento em lote e exportação Excel automatizada.'
+        : 'Complete Flask application for HVI data extraction and analysis from PDFs. Visual interface with drag-and-drop, batch processing and automated Excel export.',
       tags: ['Python', 'Flask', 'PDF Processing', 'Data Analysis'],
-      image: null
-    },
-    {
-      id: 2,
-      title: language === 'pt' ? 'Automação de Timesheet' : 'Timesheet Automation',
-      description: language === 'pt'
-        ? 'Sistema VBA integrado para gestão automatizada de timesheet com geração de PDF e envio por email.'
-        : 'Integrated VBA system for automated timesheet management with PDF generation and email sending.',
-      tags: ['Excel', 'VBA', 'Automation', 'PDF'],
-      image: null
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80'
     },
     {
       id: 3,
-      title: language === 'pt' ? 'Workflow de Aprovação' : 'Approval Workflow',
+      title: language === 'pt' ? 'Dashboard Analytics em Tempo Real' : 'Real-Time Analytics Dashboard',
       description: language === 'pt'
-        ? 'Sistema de gestão de drafts e aprovações para operações de importação/exportação.'
-        : 'Draft and approval management system for import/export operations.',
-      tags: ['Python', 'Database', 'Workflow'],
-      image: null
+        ? 'Dashboard interativo com métricas de performance, KPIs e visualizações dinâmicas. Integração com múltiplas fontes de dados e atualização automática.'
+        : 'Interactive dashboard with performance metrics, KPIs and dynamic visualizations. Integration with multiple data sources and automatic updates.',
+      tags: ['React', 'Chart.js', 'API', 'Real-time'],
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'
+    },
+    {
+      id: 4,
+      title: language === 'pt' ? 'Sistema de Email Marketing Automatizado' : 'Automated Email Marketing System',
+      description: language === 'pt'
+        ? 'Plataforma completa para campanhas de email com segmentação inteligente, templates personalizáveis e análise de métricas de conversão.'
+        : 'Complete platform for email campaigns with smart segmentation, customizable templates and conversion metrics analysis.',
+      tags: ['Python', 'API', 'Automation', 'Analytics'],
+      image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80'
     }
   ]);
 
@@ -192,37 +193,122 @@ export default function Portfolio() {
     }, 800);
   };
 
-  // Mouse tracking
+  // LÓGICA COMPLETA DO BOT COM TODAS AS REAÇÕES - CORRIGIDA
   useEffect(() => {
+    let dizzyTimeout = null;
+    let lastState = 'normal';
+    
     const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      lastMoveTime.current = Date.now();
-      setBotSleeping(false);
+      const newX = e.clientX;
+      const newY = e.clientY;
+      
+      setMousePos({ x: newX, y: newY });
+      
+      const now = Date.now();
+      const timeDiff = now - lastMoveTime.current;
+      
+      // Calcular velocidade do mouse
+      const distance = Math.sqrt(
+        Math.pow(newX - lastMousePos.current.x, 2) + 
+        Math.pow(newY - lastMousePos.current.y, 2)
+      );
+      const speed = distance / Math.max(timeDiff, 1);
+      
+      // RESETAR TIMER DE INATIVIDADE
+      if (inactivityTimer.current) {
+        clearTimeout(inactivityTimer.current);
+      }
+      
+      // CALCULAR DISTÂNCIA DO BOTÃO DE ORÇAMENTO (canto superior esquerdo)
+      const budgetButtonX = 100;
+      const budgetButtonY = 30;
+      const distanceToBudgetButton = Math.sqrt(
+        Math.pow(newX - budgetButtonX, 2) + 
+        Math.pow(newY - budgetButtonY, 2)
+      );
+      
+      // DETERMINAR NOVO ESTADO (prioridade: Feliz > Tonto > Normal)
+      let newState = 'normal';
+      
+      if (distanceToBudgetButton < 150) {
+        // Perto do botão = FELIZ ❤️
+        newState = 'happy';
+        // Cancelar timeout de tonto se existir
+        if (dizzyTimeout) {
+          clearTimeout(dizzyTimeout);
+          dizzyTimeout = null;
+        }
+      } else if (speed > 3) {
+        // Balançando rápido = TONTO ✨
+        newState = 'dizzy';
+        // Cancelar timeout anterior
+        if (dizzyTimeout) {
+          clearTimeout(dizzyTimeout);
+        }
+        // Criar novo timeout para voltar ao normal
+        dizzyTimeout = setTimeout(() => {
+          setBotState('normal');
+          lastState = 'normal';
+          dizzyTimeout = null;
+        }, 1500);
+      } else {
+        // Verificar se ainda está no timeout de tonto
+        if (dizzyTimeout !== null) {
+          newState = 'dizzy'; // Manter tonto até o timeout
+        } else {
+          newState = 'normal';
+        }
+      }
+      
+      // Atualizar estado apenas se mudou
+      if (newState !== lastState) {
+        setBotState(newState);
+        lastState = newState;
+      }
+      
+      // DEFINIR TIMER PARA DORMIR (3 segundos de inatividade)
+      inactivityTimer.current = setTimeout(() => {
+        setBotState('sleeping');
+        lastState = 'sleeping';
+        if (dizzyTimeout) {
+          clearTimeout(dizzyTimeout);
+          dizzyTimeout = null;
+        }
+      }, 3000);
+      
+      lastMoveTime.current = now;
+      lastMousePos.current = { x: newX, y: newY };
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-
-    // Check for sleep
-    const sleepCheck = setInterval(() => {
-      if (Date.now() - lastMoveTime.current > 3000) {
-        setBotSleeping(true);
-      }
-    }, 500);
-
-    // Random blinking
-    const blinkInterval = setInterval(() => {
-      if (!botSleeping) {
-        setBotBlinking(true);
-        setTimeout(() => setBotBlinking(false), 200);
-      }
-    }, Math.random() * 4000 + 2000);
+    
+    // Timer inicial para dormir
+    inactivityTimer.current = setTimeout(() => {
+      setBotState('sleeping');
+    }, 3000);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      clearInterval(sleepCheck);
-      clearInterval(blinkInterval);
+      if (inactivityTimer.current) {
+        clearTimeout(inactivityTimer.current);
+      }
+      if (dizzyTimeout) {
+        clearTimeout(dizzyTimeout);
+      }
     };
-  }, [botSleeping]);
+  }, []);
+
+  // Auto-piscar a cada 3-5 segundos quando em estado normal
+  useEffect(() => {
+    if (botState === 'normal') {
+      const blinkInterval = setInterval(() => {
+        setBotState('blinking');
+        setTimeout(() => setBotState('normal'), 200);
+      }, Math.random() * 2000 + 3000);
+      
+      return () => clearInterval(blinkInterval);
+    }
+  }, [botState]);
 
   // Fullpage navigation
   useEffect(() => {
@@ -288,44 +374,30 @@ ${budgetForm.description}
   return (
     <div className="fullpage-container" ref={containerRef}>
       
-      {/* Interactive Background */}
-      <div className="grid-pattern" style={{
-        transform: `translate(${mousePos.x * 0.01}px, ${mousePos.y * 0.01}px)`
-      }}></div>
-      <div className="gradient-blur gradient-1" style={{
-        transform: `translate(${mousePos.x * 0.05}px, ${mousePos.y * 0.05}px)`
-      }}></div>
-      <div className="gradient-blur gradient-2" style={{
-        transform: `translate(${-mousePos.x * 0.03}px, ${-mousePos.y * 0.03}px)`
-      }}></div>
-      <div className="gradient-blur gradient-3" style={{
-        transform: `translate(${mousePos.x * 0.02}px, ${mousePos.y * 0.02}px)`
-      }}></div>
+      {/* Background ESTÁTICO */}
+      <div className="bg-light-1"></div>
+      <div className="bg-light-2"></div>
+      <div className="bg-light-3"></div>
+      <div className="grid-pattern"></div>
+      <div className="gradient-blur gradient-1"></div>
+      <div className="gradient-blur gradient-2"></div>
+      <div className="gradient-blur gradient-3"></div>
 
-      {/* Floating Particles */}
-      <div className="floating-particles">
-        {[...Array(15)].map((_, i) => (
-          <div key={i} className="particle" style={{
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 10}s`,
-            animationDuration: `${15 + Math.random() * 10}s`
-          }} />
-        ))}
-      </div>
-
-      {/* Animated Bot Companion */}
+      {/* Animated Bot Companion COM TODAS AS REAÇÕES */}
       <div 
-        className={`bot-companion ${botSleeping ? 'sleeping' : ''}`}
+        className={`bot-companion ${botState}`}
         style={{
           left: `${mousePos.x + 20}px`,
           top: `${mousePos.y + 20}px`
         }}
       >
         <div className="bot-body">
-          <div className={`bot-eye left ${botBlinking ? 'blink' : ''}`}></div>
-          <div className={`bot-eye right ${botBlinking ? 'blink' : ''}`}></div>
-          {botSleeping && <div className="zzz">zzz</div>}
+          <div className={`bot-eye ${botState}`}></div>
+          <div className={`bot-eye ${botState}`}></div>
         </div>
+        {botState === 'sleeping' && <div className="zzz">💤</div>}
+        {botState === 'happy' && <div className="heart">❤️</div>}
+        {botState === 'dizzy' && <div className="stars">✨</div>}
       </div>
 
       {/* Language Toggle */}
@@ -659,27 +731,13 @@ ${budgetForm.description}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {projects.map((project) => (
                   <div key={project.id} className="glass-card project-card overflow-hidden group">
-                    <div className="relative">
-                      {project.image ? (
-                        <div className="relative h-48 overflow-hidden">
-                          <img 
-                            src={project.image} 
-                            alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent"></div>
-                        </div>
-                      ) : (
-                        <label className="upload-zone block cursor-pointer">
-                          <input 
-                            type="file" 
-                            accept="image/*"
-                            onChange={(e) => handleImageUpload(project.id, e)}
-                          />
-                          <ExternalLink size={40} className="mx-auto mb-3 text-[#00d9ff] opacity-50" />
-                          <p className="text-sm text-gray-400">{t.clickToAdd}</p>
-                        </label>
-                      )}
+                    <div className="relative h-48 overflow-hidden">
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent"></div>
                     </div>
 
                     <div className="p-6">

@@ -1,123 +1,200 @@
-/* Fullpage System */
 .fullpage-container {
+  position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  position: relative;
+  background: #0a0a0f;
 }
 
+/* ILUMINAÇÃO ROXA NO CANTO INFERIOR ESQUERDO */
+.bg-light-1 {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: rgba(168, 85, 247, 0.15);
+  bottom: -100px;
+  left: -100px;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 1;
+  animation: pulse-light 7s ease-in-out infinite;
+}
+
+/* ILUMINAÇÃO AZUL NO CANTO SUPERIOR DIREITO */
+.bg-light-2 {
+  position: fixed;
+  width: 550px;
+  height: 550px;
+  background: rgba(0, 217, 255, 0.18);
+  top: -120px;
+  right: -120px;
+  border-radius: 50%;
+  filter: blur(130px);
+  pointer-events: none;
+  z-index: 1;
+  animation: pulse-light 8s ease-in-out infinite 1.5s;
+}
+
+/* LUZ ADICIONAL CENTRAL SUAVE */
+.bg-light-3 {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: rgba(100, 180, 255, 0.10);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+  animation: pulse-light 9s ease-in-out infinite 3s;
+}
+
+@keyframes pulse-light {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+/* Background Grid */
+.grid-pattern {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Gradient Blurs Adicionais */
+.gradient-blur {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gradient-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.12) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+}
+
+.gradient-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.10) 0%, transparent 70%);
+  bottom: -150px;
+  left: -150px;
+}
+
+.gradient-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Pages Wrapper */
 .pages-wrapper {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-  will-change: transform;
+  position: relative;
+  height: 100vh;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
 }
 
 .page {
-  width: 100vw;
   height: 100vh;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .page-content {
+  position: relative;
+  z-index: 10;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeInPage 0.8s ease-out;
-}
-
-@keyframes fadeInPage {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Page Indicators */
 .page-indicators {
   position: fixed;
-  right: 40px;
+  right: 30px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  z-index: 1000;
 }
 
 .page-dot {
   position: relative;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.2);
   border: 2px solid transparent;
+  border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s;
   padding: 0;
 }
 
 .page-dot:hover {
-  background: rgba(0, 217, 255, 0.5);
-  transform: scale(1.3);
+  background: rgba(0, 217, 255, 0.3);
+  transform: scale(1.2);
 }
 
 .page-dot.active {
   background: #00d9ff;
-  box-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
-  transform: scale(1.5);
   border-color: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.5);
 }
 
 .dot-label {
   position: absolute;
-  right: 30px;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  color: white;
-  font-size: 12px;
+  background: rgba(10, 10, 15, 0.9);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #00d9ff;
   font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.3s;
   pointer-events: none;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  transition: all 0.3s;
+  border: 1px solid rgba(0, 217, 255, 0.2);
 }
 
-.page-dot:hover .dot-label,
-.page-dot.active .dot-label {
+.page-dot:hover .dot-label {
   opacity: 1;
 }
 
 /* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 40px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  color: #00d9ff;
-  animation: bounce 2s infinite;
-  cursor: pointer;
   background: none;
   border: none;
+  color: rgba(0, 217, 255, 0.6);
+  cursor: pointer;
+  animation: bounce 2s infinite;
   padding: 0;
-  z-index: 10;
-  opacity: 0.7;
-  transition: opacity 0.3s;
-}
-
-.scroll-indicator:hover {
-  opacity: 1;
+  z-index: 100;
 }
 
 @keyframes bounce {
@@ -132,54 +209,70 @@
   }
 }
 
-/* Responsive adjustments */
+.scroll-indicator:hover {
+  color: #00d9ff;
+}
+
 @media (max-width: 768px) {
+  /* Page indicators menores */
   .page-indicators {
-    right: 20px;
-    gap: 15px;
+    right: 12px;
+    gap: 10px;
   }
   
   .page-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
+    border-width: 1px;
   }
   
   .dot-label {
     display: none;
   }
-}
-
-/* Prevent text selection during transition */
-.fullpage-container.transitioning {
-  user-select: none;
-}
-
-/* Smooth entrance for elements */
-.page h1, .page h2, .page h3 {
-  animation: slideInUp 0.6s ease-out;
-  animation-delay: 0.2s;
-  animation-fill-mode: backwards;
-}
-
-.page p {
-  animation: slideInUp 0.6s ease-out;
-  animation-delay: 0.3s;
-  animation-fill-mode: backwards;
-}
-
-.page .glass-card {
-  animation: slideInUp 0.6s ease-out;
-  animation-delay: 0.4s;
-  animation-fill-mode: backwards;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
+  
+  /* Desabilitar luzes de fundo no mobile para performance */
+  .bg-light-1, .bg-light-2, .bg-light-3 {
+    display: none;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  /* Gradients menores no mobile */
+  .gradient-blur {
+    width: 300px !important;
+    height: 300px !important;
+    filter: blur(60px) !important;
+  }
+
+  /* Grid pattern mais sutil */
+  .grid-pattern {
+    opacity: 0.5;
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    bottom: 20px;
+    font-size: 1.2rem;
+  }
+
+  /* Page content com padding adequado */
+  .page-content {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  /* Transição de página mais rápida no mobile */
+  .pages-wrapper {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .profile-image-container {
+    width: 160px;
+    height: 200px;
+  }
+
+  .scroll-indicator {
+    bottom: 15px;
   }
 }
